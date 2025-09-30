@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { X, CheckCircle, AlertCircle, Info } from 'lucide-react';
+import { X, CircleCheck as CheckCircle, CircleAlert as AlertCircle, Info } from 'lucide-react';
 
 interface ToastProps {
   message: string;
