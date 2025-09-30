@@ -3,8 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const ChefzAPI = require('./chefz-api');
-const ToYouAPI = require('./toyou-api');
+const MockChefzAPI = require('./mock-chefz-api');
+const MockToYouAPI = require('./mock-toyou-api');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -22,20 +22,15 @@ let requestQueue = [];
 let processing = false;
 
 const processDeliveryComparison = async (latitude, longitude, maxChefs = 6, page = 2, position = 0) => {
-  console.log(`🚀 Starting delivery comparison for lat=${latitude}, lng=${longitude}, starting from page=${page}, position=${position}`);
+  console.log(`🎭 [PROTOTYPE MODE] Starting delivery comparison for lat=${latitude}, lng=${longitude}, starting from page=${page}, position=${position}`);
 
-  const chefzAPI = new ChefzAPI(latitude, longitude);
-  const toyouAPI = new ToYouAPI(latitude, longitude);
+  const chefzAPI = new MockChefzAPI(latitude, longitude);
+  const toyouAPI = new MockToYouAPI(latitude, longitude);
 
-  // Test connection to TheChefz API first
   const connectionTest = await chefzAPI.testConnection();
   if (!connectionTest) {
-    console.log('❌ TheChefz API connection failed, trying with different user agent...');
-    chefzAPI.rotateUserAgent();
-    const retryTest = await chefzAPI.testConnection();
-    if (!retryTest) {
-      throw new Error('TheChefz API is not accessible. Please check authentication tokens or try again later.');
-    }
+    console.log('❌ Mock API connection failed');
+    throw new Error('Mock API connection failed');
   }
 
   try {
@@ -246,8 +241,14 @@ app.get('/queue-status', (req, res) => {
 });
 
 app.listen(port, () => {
+  console.log('='.repeat(60));
+  console.log('🎭 PROTOTYPE MODE - SAMPLE DATA ONLY');
+  console.log('='.repeat(60));
   console.log(`Server running at http://localhost:${port}`);
   console.log('Endpoints:');
   console.log('  POST /compare - Compare delivery fees (requires lat, lng, optional maxChefs, page, position)');
   console.log('  GET /queue-status - Check queue status');
+  console.log('\n⚠️  This is a demonstration version using mock data');
+  console.log('⚠️  No real API calls are made to TheChefz or ToYou');
+  console.log('='.repeat(60));
 });
