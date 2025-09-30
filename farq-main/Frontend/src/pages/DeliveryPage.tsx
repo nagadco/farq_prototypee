@@ -4,6 +4,7 @@ import SearchBar from '../components/SearchBar';
 import RestaurantCard from '../components/RestaurantCard';
 import BestOfferModal from '../components/BestOfferModal';
 import LoadingModal from '../components/LoadingModal';
+import Toast from '../components/Toast';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useLocation } from '../contexts/LocationContext';
 import { RestaurantService, type NextRequest } from '../services/restaurantService';
@@ -24,8 +25,13 @@ export default function DeliveryPage() {
   const [hasMore, setHasMore] = useState(false);
   const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
   const [showBestOfferModal, setShowBestOfferModal] = useState(false);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info'; visible: boolean }>({ message: '', type: 'info', visible: false });
   const { t } = useLanguage();
   const { userLocation } = useLocation();
+
+  const showToast = (message: string, type: 'success' | 'error' | 'info' = 'info') => {
+    setToast({ message, type, visible: true });
+  };
 
   // Check if we have test param or are on /test route
   const isTestMode = new URLSearchParams(window.location.search).has('test') ||
@@ -68,9 +74,11 @@ export default function DeliveryPage() {
 
       setNextRequest(result.nextRequest);
       setHasMore(result.hasMore);
+      showToast('Restaurants loaded successfully!', 'success');
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to load restaurants. Please try again.';
       setError(errorMessage);
+      showToast(errorMessage, 'error');
     } finally {
       setLoading(false);
     }
@@ -248,56 +256,110 @@ export default function DeliveryPage() {
           <h2 className="text-center text-[#1E1E1E] text-3xl font-medium mb-8">Select by Category</h2>
           {/* Desktop: Grid Layout */}
           <div className="hidden lg:grid lg:grid-cols-9 gap-6 justify-items-center">
-            <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-              <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden">
+            <div
+              className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 hover:scale-105 transition-all duration-200 active:scale-95"
+              onClick={() => setSearchQuery('Fast Food')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && setSearchQuery('Fast Food')}
+            >
+              <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden hover:shadow-md transition-shadow">
                 <img src="/categories_img/Fast-Food.png" alt="Fast Food" className="w-full h-full object-cover" />
               </div>
               <span className="text-[#03282C] text-sm font-semibold text-center">Fast Food</span>
             </div>
-            <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-              <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden">
+            <div
+              className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 hover:scale-105 transition-all duration-200 active:scale-95"
+              onClick={() => setSearchQuery('Arabic')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && setSearchQuery('Arabic')}
+            >
+              <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden hover:shadow-md transition-shadow">
                 <img src="/categories_img/Arabic.png" alt="Arabic" className="w-full h-full object-cover" />
               </div>
               <span className="text-[#03282C] text-sm font-semibold text-center">Arabic</span>
             </div>
-            <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-              <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden">
+            <div
+              className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 hover:scale-105 transition-all duration-200 active:scale-95"
+              onClick={() => setSearchQuery('Sandwich')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && setSearchQuery('Sandwich')}
+            >
+              <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden hover:shadow-md transition-shadow">
                 <img src="/categories_img/Sandwich.png" alt="Sandwich" className="w-full h-full object-cover" />
               </div>
               <span className="text-[#03282C] text-sm font-semibold text-center">Sandwich</span>
             </div>
-            <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-              <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden">
+            <div
+              className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 hover:scale-105 transition-all duration-200 active:scale-95"
+              onClick={() => setSearchQuery('Grill')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && setSearchQuery('Grill')}
+            >
+              <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden hover:shadow-md transition-shadow">
                 <img src="/categories_img/Grill.png" alt="Grill" className="w-full h-full object-cover" />
               </div>
               <span className="text-[#03282C] text-sm font-semibold text-center">Grill</span>
             </div>
-            <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-              <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden">
+            <div
+              className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 hover:scale-105 transition-all duration-200 active:scale-95"
+              onClick={() => setSearchQuery('Seafood')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && setSearchQuery('Seafood')}
+            >
+              <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden hover:shadow-md transition-shadow">
                 <img src="/categories_img/Seafood.png" alt="Seafood" className="w-full h-full object-cover" />
               </div>
               <span className="text-[#03282C] text-sm font-semibold text-center">Seafood</span>
             </div>
-            <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-              <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden">
+            <div
+              className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 hover:scale-105 transition-all duration-200 active:scale-95"
+              onClick={() => setSearchQuery('Asian')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && setSearchQuery('Asian')}
+            >
+              <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden hover:shadow-md transition-shadow">
                 <img src="/categories_img/Asian.png" alt="Asian" className="w-full h-full object-cover" />
               </div>
               <span className="text-[#03282C] text-sm font-semibold text-center">Asian</span>
             </div>
-            <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-              <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden">
+            <div
+              className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 hover:scale-105 transition-all duration-200 active:scale-95"
+              onClick={() => setSearchQuery('Healthy')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && setSearchQuery('Healthy')}
+            >
+              <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden hover:shadow-md transition-shadow">
                 <img src="/categories_img/Healthy.png" alt="Healthy" className="w-full h-full object-cover" />
               </div>
               <span className="text-[#03282C] text-sm font-semibold text-center">Healthy</span>
             </div>
-            <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-              <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden">
+            <div
+              className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 hover:scale-105 transition-all duration-200 active:scale-95"
+              onClick={() => setSearchQuery('Mexican')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && setSearchQuery('Mexican')}
+            >
+              <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden hover:shadow-md transition-shadow">
                 <img src="/categories_img/Mexican.png" alt="Mexican" className="w-full h-full object-cover" />
               </div>
               <span className="text-[#03282C] text-sm font-semibold text-center">Mexican</span>
             </div>
-            <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-              <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden">
+            <div
+              className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 hover:scale-105 transition-all duration-200 active:scale-95"
+              onClick={() => setSearchQuery('Pasta')}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && setSearchQuery('Pasta')}
+            >
+              <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden hover:shadow-md transition-shadow">
                 <img src="/categories_img/Pasta.png" alt="Pasta" className="w-full h-full object-cover" />
               </div>
               <span className="text-[#03282C] text-sm font-semibold text-center">Pasta</span>
@@ -306,55 +368,55 @@ export default function DeliveryPage() {
           {/* Mobile: Scrollable 2 Rows */}
           <div className="lg:hidden overflow-x-auto scrollbar-hide">
             <div className="grid grid-flow-col auto-cols-max gap-x-6 gap-y-4" style={{ gridTemplateRows: 'repeat(2, minmax(0, 1fr))' }}>
-              <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity w-20">
+              <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 active:scale-95 transition-all w-20" onClick={() => setSearchQuery('Fast Food')}>
                 <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden">
                   <img src="/categories_img/Fast-Food.png" alt="Fast Food" className="w-full h-full object-cover" />
                 </div>
                 <span className="text-[#03282C] text-xs font-semibold text-center whitespace-nowrap">Fast Food</span>
               </div>
-              <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity w-20">
+              <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 active:scale-95 transition-all w-20" onClick={() => setSearchQuery('Seafood')}>
                 <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden">
                   <img src="/categories_img/Seafood.png" alt="Seafood" className="w-full h-full object-cover" />
                 </div>
                 <span className="text-[#03282C] text-xs font-semibold text-center whitespace-nowrap">Seafood</span>
               </div>
-              <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity w-20">
+              <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 active:scale-95 transition-all w-20" onClick={() => setSearchQuery('Arabic')}>
                 <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden">
                   <img src="/categories_img/Arabic.png" alt="Arabic" className="w-full h-full object-cover" />
                 </div>
                 <span className="text-[#03282C] text-xs font-semibold text-center whitespace-nowrap">Arabic</span>
               </div>
-              <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity w-20">
+              <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 active:scale-95 transition-all w-20" onClick={() => setSearchQuery('Asian')}>
                 <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden">
                   <img src="/categories_img/Asian.png" alt="Asian" className="w-full h-full object-cover" />
                 </div>
                 <span className="text-[#03282C] text-xs font-semibold text-center whitespace-nowrap">Asian</span>
               </div>
-              <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity w-20">
+              <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 active:scale-95 transition-all w-20" onClick={() => setSearchQuery('Sandwich')}>
                 <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden">
                   <img src="/categories_img/Sandwich.png" alt="Sandwich" className="w-full h-full object-cover" />
                 </div>
                 <span className="text-[#03282C] text-xs font-semibold text-center whitespace-nowrap">Sandwich</span>
               </div>
-              <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity w-20">
+              <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 active:scale-95 transition-all w-20" onClick={() => setSearchQuery('Healthy')}>
                 <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden">
                   <img src="/categories_img/Healthy.png" alt="Healthy" className="w-full h-full object-cover" />
                 </div>
                 <span className="text-[#03282C] text-xs font-semibold text-center whitespace-nowrap">Healthy</span>
               </div>
-              <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity w-20">
+              <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 active:scale-95 transition-all w-20" onClick={() => setSearchQuery('Grill')}>
                 <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden">
                   <img src="/categories_img/Grill.png" alt="Grill" className="w-full h-full object-cover" />
                 </div>
                 <span className="text-[#03282C] text-xs font-semibold text-center whitespace-nowrap">Grill</span>
               </div>
-              <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity w-20">
+              <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 active:scale-95 transition-all w-20" onClick={() => setSearchQuery('Mexican')}>
                 <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden">
                   <img src="/categories_img/Mexican.png" alt="Mexican" className="w-full h-full object-cover" />
                 </div>
                 <span className="text-[#03282C] text-xs font-semibold text-center whitespace-nowrap">Mexican</span>
               </div>
-              <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity w-20">
+              <div className="flex flex-col items-center gap-3 cursor-pointer hover:opacity-80 active:scale-95 transition-all w-20" onClick={() => setSearchQuery('Pasta')}>
                 <div className="w-20 h-20 rounded-full bg-white shadow-sm flex items-center justify-center overflow-hidden">
                   <img src="/categories_img/Pasta.png" alt="Pasta" className="w-full h-full object-cover" />
                 </div>
@@ -499,6 +561,14 @@ export default function DeliveryPage() {
 
       {/* Loading Modal */}
       <LoadingModal isOpen={loading} />
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.visible}
+        onClose={() => setToast({ ...toast, visible: false })}
+      />
     </div>
   );
 }

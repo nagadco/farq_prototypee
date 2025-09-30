@@ -38,8 +38,8 @@ export default function RestaurantCard({
   };
   return (
     <div
-      className={`w-full max-w-[333px] bg-white rounded-2xl border overflow-hidden relative cursor-pointer hover:shadow-lg transition-shadow ${
-        isClosed ? 'opacity-75 border-gray-300' : 'border-gray-200'
+      className={`w-full max-w-[333px] bg-white rounded-2xl border overflow-hidden relative cursor-pointer hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 ${
+        isClosed ? 'opacity-75 border-gray-300' : 'border-gray-200 hover:border-gray-300'
       }`}
       onClick={() => {
         if (onRestaurantClick) {
@@ -54,6 +54,25 @@ export default function RestaurantCard({
           });
         }
       }}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (onRestaurantClick) {
+            onRestaurantClick({
+              name,
+              rating,
+              distance,
+              tags,
+              image,
+              deliveryOptions,
+              isClosed
+            });
+          }
+        }
+      }}
+      aria-label={`View details for ${name}`}
     >
       {/* Closed Overlay */}
       {isClosed && (

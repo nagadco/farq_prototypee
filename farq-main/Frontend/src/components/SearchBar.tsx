@@ -57,8 +57,10 @@ export default function SearchBar({ searchQuery, onSearchChange, sortBy, onSortC
                 type="text"
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                 placeholder={t('search_placeholder')}
-                className="text-black text-base flex-1 bg-transparent border-none outline-none placeholder-[#94A3B8]"
+                className="text-black text-base flex-1 bg-transparent border-none outline-none placeholder-[#94A3B8] focus:outline-none"
+                aria-label="Search for restaurants"
               />
               <div className="w-px h-[34px] bg-[#CBD5E1]" />
               <div className="flex items-center gap-2">
@@ -81,7 +83,9 @@ export default function SearchBar({ searchQuery, onSearchChange, sortBy, onSortC
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setShowSortDropdown(!showSortDropdown)}
-                className="px-[18px] py-3 bg-white border-[0.5px] border-[#CBD5E1] rounded-[5px] flex items-center gap-1.5 hover:bg-gray-50 transition-colors"
+                className="px-[18px] py-3 bg-white border-[0.5px] border-[#CBD5E1] rounded-[5px] flex items-center gap-1.5 hover:bg-gray-50 active:bg-gray-100 transition-colors focus:ring-2 focus:ring-[#043434] focus:ring-offset-2"
+                aria-label="Sort options"
+                aria-expanded={showSortDropdown}
               >
                 <span className="text-[#0F172A] text-sm">{currentSortLabel}</span>
                 <ChevronDown className={`w-4 h-4 text-[#0F172A] transition-transform ${showSortDropdown ? 'rotate-180' : ''}`} />
@@ -111,7 +115,8 @@ export default function SearchBar({ searchQuery, onSearchChange, sortBy, onSortC
             {/* Search Button */}
             <button
               onClick={handleSearch}
-              className="px-6 py-[11px] bg-[#043434] rounded-lg flex items-center gap-1.5 hover:bg-[#033232] transition-colors"
+              className="px-6 py-[11px] bg-[#043434] rounded-lg flex items-center gap-1.5 hover:bg-[#033232] active:bg-[#022222] transition-colors focus:ring-2 focus:ring-[#043434] focus:ring-offset-2"
+              aria-label="Search"
             >
               <span className="text-[#F8FAFC] text-lg font-semibold">{t('search')}</span>
               <Search className="w-[18px] h-[18px] text-[#F8FAFC]" />
@@ -138,13 +143,16 @@ export default function SearchBar({ searchQuery, onSearchChange, sortBy, onSortC
                   type="text"
                   value={searchQuery}
                   onChange={(e) => onSearchChange(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                   placeholder={t('search_mobile_placeholder')}
-                  className="flex-1 text-black text-base font-normal leading-6 bg-transparent border-none outline-none placeholder-[#94A3B8]"
+                  className="flex-1 text-black text-base font-normal leading-6 bg-transparent border-none outline-none placeholder-[#94A3B8] focus:outline-none"
+                  aria-label="Search for restaurants"
                 />
               </div>
               <button
                 onClick={handleSearch}
-                className="bg-[#043434] rounded-xl flex justify-center items-center gap-1.5 px-6 py-[11px]"
+                className="bg-[#043434] rounded-xl flex justify-center items-center gap-1.5 px-6 py-[11px] hover:bg-[#033232] active:bg-[#022222] transition-colors"
+                aria-label="Search"
               >
                 <Search className="w-[18px] h-[18px] text-[#F8FAFC]" />
               </button>
@@ -157,7 +165,9 @@ export default function SearchBar({ searchQuery, onSearchChange, sortBy, onSortC
             <div className="relative h-10 flex justify-start items-start" ref={dropdownRef}>
               <button
                 onClick={() => setShowSortDropdown(!showSortDropdown)}
-                className="self-stretch bg-white rounded-xl border border-[#CBD5E1]/50 flex justify-center items-center gap-1.5 px-[18px] py-3"
+                className="self-stretch bg-white rounded-xl border border-[#CBD5E1]/50 flex justify-center items-center gap-1.5 px-[18px] py-3 hover:bg-gray-50 active:bg-gray-100 transition-colors"
+                aria-label="Sort options"
+                aria-expanded={showSortDropdown}
               >
                 <span className="text-center text-[#0F172A] text-sm font-normal leading-[17px]">
                   {currentSortLabel}

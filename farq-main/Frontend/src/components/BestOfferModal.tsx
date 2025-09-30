@@ -30,9 +30,9 @@ export default function BestOfferModal({ isOpen, onClose, restaurant }: BestOffe
   if (!isOpen || !restaurant) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center" role="dialog" aria-modal="true" aria-labelledby="modal-title">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/30 backdrop-blur-md" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/30 backdrop-blur-md transition-opacity" onClick={onClose} />
 
       {/* Modal */}
       <div
@@ -47,7 +47,8 @@ export default function BestOfferModal({ isOpen, onClose, restaurant }: BestOffe
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full transition-colors"
+          className="absolute top-4 right-4 p-2 hover:bg-gray-100 active:bg-gray-200 rounded-full transition-colors focus:ring-2 focus:ring-[#043434] focus:ring-offset-2"
+          aria-label="Close modal"
         >
           <X className="w-5 h-5 text-gray-500" />
         </button>
@@ -207,7 +208,11 @@ export default function BestOfferModal({ isOpen, onClose, restaurant }: BestOffe
 
             {/* Order Button */}
             <button
-              className="self-stretch px-4 sm:px-6 py-3 sm:py-4 bg-[#043434] rounded-lg flex justify-center items-center gap-1.5 hover:bg-[#033232] transition-colors"
+              onClick={() => {
+                alert(`🎭 PROTOTYPE: Order button for ${restaurant.deliveryPartner.name} clicked!\n\nIn production, this would redirect to ${restaurant.deliveryPartner.name}'s app/website.`);
+              }}
+              className="self-stretch px-4 sm:px-6 py-3 sm:py-4 bg-[#043434] rounded-lg flex justify-center items-center gap-1.5 hover:bg-[#033232] active:bg-[#022222] transition-all hover:scale-[1.02] active:scale-[0.98] focus:ring-2 focus:ring-[#043434] focus:ring-offset-2"
+              aria-label={`Order from ${restaurant.deliveryPartner.name}`}
             >
               <div className="text-center text-[#F8FAFC] text-lg sm:text-xl font-semibold leading-[22px]">
                 {t('order_on')} {restaurant.deliveryPartner.name}
